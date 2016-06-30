@@ -52,3 +52,13 @@
 a.alleged {
 	color: #FE9F30;
 }
+
+.uptime-circle {
+    color: #73C64E;
+    text-shadow: 0 0 3px #73C64E;
+}
+
+.downtime-circle {
+    color: #DF3E3E;
+    text-shadow: 0 0 3px #DF3E3E;
+}
