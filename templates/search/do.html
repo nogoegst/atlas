@@ -93,7 +93,8 @@
 			<td><%= relay.get('or_address') %></td>
 			<td>
             <% _.each(relay.get('flags'), function(flag) { %>
-            <img class="inline flags" rel="tooltip" src="img/flags/<%= flag[1] %>.png" title="<%= flag[0] %>"/>
+            <i class="fa fa-<%= flag[1] %> fa-lg fa-fw" title="<%= flag[0] %>" aria-hidden="true"></i>
+            <span class="sr-only"><%= flag[0] %></span>
             <% }); %>
             </td>
 			<td><%= relay.get('or_port') %></td>

@@ -9,46 +9,40 @@ define([
 	var relayModel = Backbone.Model.extend({
         baseurl: 'https://onionoo.torproject.org',
         fingerprint: '',
-        parseflags: function(flags, size) {
+        parseflags: function(flags) {
             var output = [];
             var model = this;
             _.each(flags, function(flag) {
                 if (flag == "Authority") {
-                    output.push([flag,"award_stroke_"+size[2]]);
+                    output.push([flag,"bank"]);
                 }
                 if (flag == "BadExit") {
                     model.set({badexit: true});
-                    output.push([flag, "denied_"+size[0]]);
+                    output.push([flag, "ban"]);
                 }
                 if (flag == "Fast") {
-                    output.push([flag,"bolt_"+size[0]]);
+                    output.push([flag,"flash"]);
                 }
                 if (flag == "Guard") {
-                    output.push([flag,"share_"+size[0]]);
+                    output.push([flag,"shield"]);
                 }
                 if (flag == "HSDir") {
-                    output.push([flag,"book_alt_"+size[0]]);
-                }
-                if (flag == "Named") {
-                    output.push([flag,"info_"+size[2]]);
+                    output.push([flag,"book"]);
                 }
                 if (flag == "Running") {
-                    output.push([flag,"fork_"+size[1]]);
+                    output.push([flag,"gears"]);
                 }
                 if (flag == "Stable") {
-                    output.push([flag,"cd_"+size[0]]);
+                    output.push([flag,"dot-circle-o"]);
                 }
                 if (flag == "V2Dir") {
-                    output.push([flag,"book_"+size[1]]);
+                    output.push([flag,"folder"]);
                 }
                 if (flag == "Valid") {
-                    output.push([flag,"check_alt_"+size[0]]);
-                }
-                if (flag == "Unnamed") {
-                    output.push([flag,"question_mark_"+size[2]]);
+                    output.push([flag,"check"]);
                 }
                 if (flag == "Exit") {
-                    output.push([flag,"cloud_download_"+size[0]]);
+                    output.push([flag,"sign-out"]);
                 }
             });
             return output;
@@ -188,8 +182,7 @@ define([
                     relay.transports = relay.transports ? relay.transports : null;
                     relay.fingerprint = relay.hashed_fingerprint ? relay.hashed_fingerprint : relay.fingerprint;
                     model.set({badexit: false});
-                    var size = ['16x16', '14x16', '8x16'];
-                    relay.flags = model.parseflags(relay.flags, size);
+                    relay.flags = model.parseflags(relay.flags);
                     model.set(relay, options);
                     success(model, relay);
                 } else {
