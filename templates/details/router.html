@@ -9,10 +9,12 @@
       <td><span class="tip" data-content="This is the nickname that the Tor relay operator chose." data-original-title="Nickname">Nickname</span></td>
       <td><%= _.escape(relay.get('nickname')) %></td>
     </tr>
+    <% if ( relay.get('contact') !== 'undefined') { %>
     <tr>
       <td><span class="tip" data-content="These are the contact details of the Tor relay operator" data-original-title="ContactInfo">Contact</span></td>
       <td><%= _.escape(relay.get('contact')) %></td>
     </tr>
+    <% } %>
     <tr>
       <td><span class="tip" data-content="Addresses and ports where the relay listens for incoming connections from clients and other relays." data-original-title="Onion-routing addresses">OR Addresses</span></td>
       <td><%= relay.get('or_addresses') %></td>
