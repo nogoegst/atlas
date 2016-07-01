@@ -33,7 +33,7 @@ define([
                     output.push([flag,"gears"]);
                 }
                 if (flag == "Stable") {
-                    output.push([flag,"dot-circle-o"]);
+                    output.push([flag,"anchor"]);
                 }
                 if (flag == "V2Dir") {
                     output.push([flag,"folder"]);
