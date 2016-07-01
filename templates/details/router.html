@@ -1,21 +1,10 @@
-<h1>Details for: <span id="relay_name"><%= relay.get('nickname') %></span></h1>
-<!-- div class="subnav">
-    <ul class="nav nav-pills">
-        <li><a href="#general">General</a></li>
-        <li><a href="#graphs">Graphs</a></li>
-        <li><a href="#misc">Misc</a></li>
-    </ul>
-</div-->
+<h1>Details for <span id="relay_name">"<%= relay.get('nickname') %>"</span></h1>
 
-<h2>General <small>Overall information on the Tor relay</small></h2>
-<hr/>
-
-<div class="row">
     <div class="panel panel-primary span4">
       <div class="panel-heading">
         <h3 class="panel-title">Configuration</h3>
       </div>
-    <table class="table table-striped">
+    <table class="table table-fixed table-striped">
     <tr>
       <td><span class="tip" data-content="This is the nickname that the Tor relay operator chose." data-original-title="Nickname">Nickname</span></td>
       <td><%= _.escape(relay.get('nickname')) %></td>
@@ -74,7 +63,7 @@
         <h3 class="panel-title">Last known properties</h3>
       <% } %>
       </div>
-    <table class="table table-striped">
+    <table class="table table-fixed table-striped">
 <!-- iif down
     <dt><span class="tip" data-content="Timestamp when the relay was last seen in the consensus." data-original-title="Last seen">Last Seen</span></dt>
     <dd><%= relay.get('last_seen') %></dd>
@@ -104,7 +93,6 @@
 
     <dt><span class="tip" data-content="Autonomous System Name" data-original-title="AS Name">AS Name</span></dt>
     <dd><%= _.escape(relay.get('as_name')) %></dd>
-
     <dt><span class="tip" data-content="Date and time when the relay was last (re-)started." data-original-title="Last restarted">Last Restarted</span></dt>
     <dd><%= relay.get('last_restarted') %></dd>
 
@@ -135,7 +123,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">Current status</h3>
       </div>
-    <table class="table table-striped">
+    <table class="table table-fixed table-striped">
     <tr>
     <% if (relay.get('running') === false) { %>
       <td><span class="tip" data-content="The time since this relay was last seen online." data-original-title="Downtime">Downtime</span></td>
@@ -156,193 +144,34 @@
 
     </table>
     </div>
-</div>
 
-<div class="row">
-<h2>Graphs <small>Pretty graphs</small></h2>
-<hr/>
-    <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="bw_days" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-            <div class="caption">
-              <h5>3 Days graph</h5>
-              <a id="save_bw_days" href="">Save Graph</a>
-            </div>
-          </div>
-          </li>
-    </ul>
-</div><div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
 
-            <div id="bw_week" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-            <div class="caption">
-              <h5>1 Week graph</h5>
-              <a id="save_bw_week" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
+<% var bw_graphs = [ ["bw_days", "3 days bandwidth graph"],
+                   ["bw_week", "1 week bandwidth graph"],
+                   ["bw_month", "1 month bandwidth graph"],
+                   ["bw_months", "3 months bandwidth graph"],
+                   ["bw_year", "1 year bandwidth graph"],
+                   ["bw_years", "5 years bandwidth graph"] ]; %>
 
-<div class="row">
-    <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="bw_month" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-            <div class="caption">
-              <h5>1 Month graph</h5>
-              <a id="save_bw_month" href="">Save Graph</a>
-            </div>
-          </div>
-          </li>
-        </ul>
-</div><div class="row">
+ <% var w_graphs = [ ["weights_week", "1 week weights graph"],
+                   ["weights_month", "1 month weights graph"],
+                   ["weights_months", "3 months weights graph"],
+                   ["weights_year", "1 year weights graph"],
+                   ["weights_years", "5 years weights graph"] ]; %>
 
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
+ <% var graphs = bw_graphs.concat(w_graphs); %>
+ <% _.each(graphs, function(graph) { %>
+            <div id="panel_<%= graph[0] %>" class="panel panel-info graph">
+              <div class="panel-heading">
+               <h3 class="panel-title"><%= graph[1] %>  
+                <a id="save_<%= graph[0] %>" href="">
+                 <i class="fa fa-fw fa-download" aria-hidden="true" title="Save graph"></i>
+                 <span class="sr-only">Save graph</span>
+                </a>
+               </h3>
+              </div> 
+              <div id="<%= graph[0] %>" class="panel-body">  
+              </div>
+            </div>
+    <% }); %>
 
-            <div id="bw_months" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-            <div class="caption">
-              <h5>3 Months graph</h5>
-              <a id="save_bw_months" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-    <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="bw_year" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-            <div class="caption">
-              <h5>1 Year graph</h5>
-              <a id="save_bw_year" href="">Save Graph</a>
-            </div>
-          </div>
-          </li>
-
-        </ul>
-</div><div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="bw_years" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>5 Years graph</h5>
-              <a id="save_bw_years" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="weights_week" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>1 Week graph</h5>
-              <a id="save_weights_week" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="weights_month" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>1 Month graph</h5>
-              <a id="save_weights_month" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="weights_months" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>3 Months graph</h5>
-              <a id="save_weights_months" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="weights_year" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>1 Year graph</h5>
-              <a id="save_weights_year" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<div class="row">
-        <ul class="thumbnails">
-        <li class="span8">
-          <div class="thumbnail">
-            <div id="weights_years" class="graph">
-            <img src="img/no-data-available.png" alt="">
-            </div>
-
-           <div class="caption">
-              <h5>5 Years graph</h5>
-              <a id="save_weights_years" href="">Save Graph</a>
-            </div>
-          </div>
-        </li>
-      </ul>
-</div>
-
-<!--
-<div class="row">
-<h2>Misc <small>unsorted other information</small></h2>
-<hr/>
-</div>
--->

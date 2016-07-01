@@ -35,8 +35,7 @@ define([
                 .attr("id", g)
                 .attr("version", 1.1)
                 .attr("xmlns", "http://www.w3.org/2000/svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+                .attr("viewBox", "5 0 550 342")
                 .append("g")
                 .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
@@ -165,8 +164,9 @@ define([
                         .text(labels[i]);
                 });
 
-            /* Remove placeholder image. */
-            d3.select("#" + g).selectAll("img").remove();
+            /* Unhide panel */
+            $("#panel_" + g).show();
+            //d3.select("#" + g).selectAll("img").remove();
 
             /* Encode SVG image for download link. */
             html = d3.select("#" + g)

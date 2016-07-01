@@ -1,6 +1,15 @@
 .graph {
-    width: 550px;
-    height: 362px;
+    display: none;
+}
+
+
+.graph svg {
+    width: 100%;
+    height: auto;
+}
+
+.table-fixed tr > td:first-child {
+    width: 30%;
 }
 
 .splash {
