@@ -11,25 +11,34 @@
 <hr/>
 
 <div class="row">
-    <div class="span4">
-    <h3>Configuration</h3>
-    <dl>
-      <dt><span class="tip" data-content="This is the nickname that the Tor relay operator chose." data-original-title="Nickname">Nickname</span></dt>
-      <dd><%= _.escape(relay.get('nickname')) %></dd>
-
-      <dt><span class="tip" data-content="Addresses and ports where the relay listens for incoming connections from clients and other relays." data-original-title="Onion-routing addresses">OR Addresses</span></dt>
-      <dd><%= relay.get('or_addresses') %></dd>
-
-      <dt><span class="tip" data-content="These are the contact details of the Tor relay operator" data-original-title="ContactInfo">Contact</span></dt>
-      <dd><%= _.escape(relay.get('contact')) %></dd>
-
-      <dt><span class="tip" data-content="Address and port where the relay listens for directory requests." data-original-title="Directory port">Dir Address</span></dt>
-      <dd><%= relay.get('dir_address') %></dd>
-
-      <dt>
+    <div class="panel panel-primary span4">
+      <div class="panel-heading">
+        <h3 class="panel-title">Configuration</h3>
+      </div>
+    <table class="table table-striped">
+    <tr>
+      <td><span class="tip" data-content="This is the nickname that the Tor relay operator chose." data-original-title="Nickname">Nickname</span></td>
+      <td><%= _.escape(relay.get('nickname')) %></td>
+    </tr>
+    <tr>
+      <td><span class="tip" data-content="These are the contact details of the Tor relay operator" data-original-title="ContactInfo">Contact</span></td>
+      <td><%= _.escape(relay.get('contact')) %></td>
+    </tr>
+    <tr>
+      <td><span class="tip" data-content="Addresses and ports where the relay listens for incoming connections from clients and other relays." data-original-title="Onion-routing addresses">OR Addresses</span></td>
+      <td><%= relay.get('or_addresses') %></td>
+    </tr>
+    <tr>
+      <td><span class="tip" data-content="Address and port where the relay listens for directory requests." data-original-title="Directory port">Dir Address</span></td>
+      <td><%= relay.get('dir_address') %></td>
+    </tr>
+    <tr>
+      <td>
       <span class="tip" data-content="Bandwidth that the relay is willing and able to provide in bytes per second." data-original-title="Advertised bandwidth">Advertised Bandwidth</span>
-      </dt>
-      <dd><span class="tip" data-content="Bandwidth rate: <%= relay.get('bandwidthr') %><br>Bandwidth burst: <%= relay.get('bandwidthb') %><br>Observed bandwidth: <%= relay.get('obandwidth') %>" data-original-title="Bandwidth values"><%= relay.get('bandwidth_hr') %></span></dd>
+      </td>
+      <td><span class="tip" data-content="Bandwidth rate: <%= relay.get('bandwidthr') %><br>Bandwidth burst: <%= relay.get('bandwidthb') %><br>Observed bandwidth: <%= relay.get('obandwidth') %>" data-original-title="Bandwidth values"><%= relay.get('bandwidth_hr') %></span></td>
+    </tr>
+<!--
       <dt><span class="tip" data-content="Port summary of IPv4 exit connections that the relay is going to accept or reject." data-original-title="IPv4 exit policy summary">IPv4 Exit Policy Summary</span></dt>
       <dd>
       <% if ('accept' in relay.get('exit_policy_summary')) { %>
@@ -54,31 +63,38 @@
 <%= $.trim(line) %><% }); %></pre>
       </dd>
     </dl>
-
-
+-->
+      </table>
     </div>
-    <div class="span4">
-    <% if (relay.get('running') === true) { %>
-    <h3>Properties</h3>
-    <dl>
-    <% } else { %>
-    <h3>Last Known Properties</h3>
-    <dl>
+    <div class="panel panel-primary span4">
+      <div class="panel-heading">
+      <% if (relay.get('running') === true) { %>
+        <h3 class="panel-title">Properties</h3>
+      <% } else { %>
+        <h3 class="panel-title">Last known properties</h3>
+      <% } %>
+      </div>
+    <table class="table table-striped">
+<!-- iif down
     <dt><span class="tip" data-content="Timestamp when the relay was last seen in the consensus." data-original-title="Last seen">Last Seen</span></dt>
     <dd><%= relay.get('last_seen') %></dd>
-    <% } %>
 
-    <dt><span class="tip" data-content="20-byte unique identifier of the relay." data-original-title="Fingerprint">Fingerprint</span></dt>
-    <dd><tt><%= relay.get('fingerprint') %></tt></dd>
-
-    <dt><span class="tip" data-content="Flags that the directory authorities assigned to this relay." data-original-title="Relay flags">Flags</span></dt>
-    <dd><% _.each(relay.get('flags'), function(flag) { %>
+-->
+   <tr>
+    <td><span class="tip" data-content="20-byte unique identifier of the relay." data-original-title="Fingerprint">Fingerprint</span></td>
+    <td><tt><%= relay.get('fingerprint') %></tt></td>
+   </tr>
+   <tr>
+    <td><span class="tip" data-content="Flags that the directory authorities assigned to this relay." data-original-title="Relay flags">Flags</span></td>
+    <td><% _.each(relay.get('flags'), function(flag) { %>
         <div class="list-group-item">
           <i class="fa fa-<%= flag[1] %> fa-lg fa-fw" title="<%= flag[0] %>" aria-hidden="true"></i>
           <span class=""><%= flag[0] %></span>
         </div>
     <% }); %>
-    </dd>
+    </td>
+   </tr>
+<!--
 
     <dt><span class="tip" data-content="Country as found in a GeoIP database by resolving the relay's first onion-routing address." data-original-title="Country">Country</span></dt>
     <dd><img class="inline country" title="<%= relay.get('countryname') %>" src="img/cc/<%= relay.get('country') %>.png"/> <%= relay.get('countryname') %></dd>
@@ -108,23 +124,37 @@
     <dd><%= relay.get('consensus_weight') %></dd>
 
     </dl>
+-->
+    </table>
     </div>
-    <div class="span4">
-    <h3>Current Status</h3>
-    <dl>
-
     <% if (relay.get('running') === false) { %>
-    <dt><span class="tip" data-content="The time since this relay was last seen online." data-original-title="Downtime">Downtime</span></dt>
-    <dd><%= relay.get('downtime') %></dd>
+    <div class="panel panel-danger span4">
     <% } else {%>
-    <dt><span class="tip" data-content="The time since this relay is online." data-original-title="Uptime">Uptime</span></dt>
-    <dd><%= relay.get('uptime_hrfull') %></dd>
+    <div class="panel panel-success span4">
     <% } %>
+      <div class="panel-heading">
+        <h3 class="panel-title">Current status</h3>
+      </div>
+    <table class="table table-striped">
+    <tr>
+    <% if (relay.get('running') === false) { %>
+      <td><span class="tip" data-content="The time since this relay was last seen online." data-original-title="Downtime">Downtime</span></td>
+      <td><%= relay.get('downtime') %></td>
+    <% } else {%>
+      <td><span class="tip" data-content="The time since this relay is online." data-original-title="Uptime">Uptime</span></td>
+      <td><%= relay.get('uptime_hrfull') %></td>
+    <% } %>
+    </tr>
+    <tr>
+      <td><span class="tip" data-content="Whether this relay is listed in the current Tor directory or not." data-original-title="Running">Running</span></td>
+    <% if (relay.get('running') === true) { %>
+      <td>Yes</td>
+    <% } else { %>
+      <td>No</td>
+    <% } %>
+    </tr>
 
-    <dt><span class="tip" data-content="Whether this relay is listed in the current Tor directory or not." data-original-title="Running">Running</span></dt>
-    <dd><%= relay.get('running') %></dd>
-
-    </dl>
+    </table>
     </div>
 </div>
 

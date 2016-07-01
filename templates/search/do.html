@@ -1,23 +1,20 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
     <h1 id="search-title"></h1>
-  </div>
 
 <% if(!relays) { %>
     <% if(error == 0) { %>
-    <div class="panel-body alert">
+    <div class="alert">
         <strong>No Results found!</strong><p>
     No Tor relays matched your query :(</p>
     </div>
     <% } else if (error == 1) { %>
-    <div class="panel-body alert alert-error">
+    <div class="alert alert-warning" role="alert">
         <strong>Too many matches!</strong><p>The current version of Atlas does
     not support a result set greater than 40. This is due to some performance
     issues in doing multiple parallel connections in javascript. Future versions
     will hopefully manage to overcome this issue.</p>
     </div>
     <% } else if (error == 2) { %>
-    <div class="panel-body alert alert-error">
+    <div class="alert alert-error">
         <strong>Backend error!</strong>
         <p>Atlas is unable to get a response from its backend server. This
         probably means that the backend server is unavailable right now. This
@@ -27,7 +24,7 @@
         Atlas.</p>
     </div>
     <% } else if (error == 3) { %>
-    <div class="panel-body alert alert-error">
+    <div class="alert alert-error">
 	<strong>JavaScript Error!</strong><p>There is a problem with your
 	javascript environment, you may have noscript enabled on the remote
 	onionoo backend. Try temporarily allowing noscript to connect to the
@@ -35,7 +32,7 @@
 		href="https://trac.torproject.org/">the bugtracker.</a></p>
     </div>
     <% } else if (error == 5) { %>
-    <div class="panel-body alert alert-error">
+    <div class="alert alert-error">
         <strong>No query submitted!</strong><p>The search query was found
 	to be empty, which is not supported. You must enter a search query
 	in order to generate results. Please have a look at <a href="#/about">
@@ -45,7 +42,7 @@
     <% } %>
 <% } else { %>
     <% if (error == 4) { %>
-    <div class="panel-body alert alert-error">
+    <div class="alert alert-error">
         <strong>Too many matches!</strong><p>The current version of
         Atlas does not support a result set greater than 50 and only displays
         the first 50 hits. This is due to some performance issues in doing
@@ -55,65 +52,84 @@
     <% } %>
 
 
-
-<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped" id="torstatus_results">
-	<thead>
-		<tr>
-			<th>Nickname</th>
-			<th>Bandwidth</th>
-			<th>Uptime/Downtime</th>
-			<th>Country</th>
-			<th>IP</th>
-			<th>Flags</th>
-			<th>ORPort</th>
-			<th>DirPort</th>
-			<th>Type</th>
-		</tr>
-	</thead>
-	<tbody>
 <% var i = 0; %>
 
 <% _.each(relays, function(relay) { %>
-		<% if (i % 2 == 0 ) { %>
-			<tr class="even">
-		<% } else { %>
-			<tr class="odd">
-		<% } %>
-			<td>
-            <a href="#details/<%= relay.get('fingerprint') %>">
+
+  <% if (relay.get('running') === true) { %>
+    <div class="panel panel-success">
+  <% } else {%>
+    <div class="panel panel-danger">
+  <% } %>
+      <div class="panel-heading">
+	<h3 class="panel-title">
+    <a href="#details/<%= relay.get('fingerprint') %>">
             <%= _.escape(relay.get('nickname')) %>
-            </a>
-            </td>
-			<td><span data-filter="<%= relay.get('bandwidth') %>"><%= relay.get('bandwidth_hr') %></td>
-			<td>
-            <% if (relay.get('running') === true) { %>
+      <% if (relay.get('is_bridge')) { %>
+      <i class="fa fa-truck" title="Bridge" aria-hidden="true"></i>
+      <span class="sr-only">Bridge</span>
+      <% } %>
+    </a>
+       </h3>
+  </div>
+      <table class="table table-bordered table-striped">
+        <tr>
+          <td>Bandwidth</td>
+          <td><span data-filter="<%= relay.get('bandwidth') %>"><%= relay.get('bandwidth_hr') %></td>
+        </tr>
+        <tr>
+          <% if (relay.get('running') === true) { %>
+          <td>Uptime</td>
+          <td>
             <span data-hidden="<%= relay.get('last_restarted') %>" title="Up for <%= relay.get('uptime_hrfull') %>" data-filter="<%= relay.get('uptime') %>" class="uptime">
-            <i class="fa fa-circle fa-fw uptime-circle" aria-hidden="true"></i>
-            <span class="sr-only">Uptime: </span>
             <%= relay.get('uptime_hr') %>
-            <% } else {%>
+          </td>
+          <% } else {%>
+          <td>Downtime</td>
+          <td>
             <span data-hidden="<%= relay.get('last_restarted') %>" title="Down for <%= relay.get('downtime_hrfull') %>" data-filter="<%= relay.get('downtime') %>" class="uptime">
-            <i class="fa fa-circle fa-fw downtime-circle" aria-hidden="true"></i>
-            <span class="sr-only">Downtime: </span>
             <%= relay.get('downtime_hr') %>
-            <% } %>
-            </span>
+          </td>
+          <% } %>
+          
+          <% if ( relay.get('country') ) { %>
+          <tr>
+            <td>Country</td>
+            <td>
+              <img class="inline country" title="<%= relay.get('countryname') %>" src="img/cc/<%= relay.get('country') %>.png"/>
             </td>
-			<td>
-            <% if ( relay.get('country')) { %>
-            <img class="inline country" title="<%= relay.get('countryname') %>" src="img/cc/<%= relay.get('country') %>.png"/>
-            <% } %>
+          </tr>
+          <% } %>
+          <% if (relay.get('or_address')) { %>
+          <tr>
+            <td>OR Address</td>
+            <td><%= relay.get('or_address') %></td>
+          </tr>
+          <% } %>
+          <% if (relay.get('or_port')) { %>
+          <tr>
+            <td>OR Port</td>
+            <td><%= relay.get('or_port') %></td>
+          </tr>
+          <% } %>
+          <% if (relay.get('dir_port')) { %>
+          <tr>
+            <td>Dir Port</td>
+            <td><%= relay.get('dir_port') %></td>
+          </tr>
+          <% } %>
+          <tr>
+            <td>Flags</td>
+            <td>
+              <% _.each(relay.get('flags'), function(flag) { %>
+              <i class="fa fa-<%= flag[1] %> fa-lg fa-fw" title="<%= flag[0] %>" aria-hidden="true"></i>
+              <span class="sr-only"><%= flag[0] %></span>
+              <% }); %>
             </td>
-			<td><%= relay.get('or_address') %></td>
-			<td>
-            <% _.each(relay.get('flags'), function(flag) { %>
-            <i class="fa fa-<%= flag[1] %> fa-lg fa-fw" title="<%= flag[0] %>" aria-hidden="true"></i>
-            <span class="sr-only"><%= flag[0] %></span>
-            <% }); %>
-            </td>
-			<td><%= relay.get('or_port') %></td>
-			<td><%= relay.get('dir_port') %></td>
-			<td>
+          </tr>
+        
+      </table>
+<!--	            <td>
 				<% if (relay.get('is_bridge')) { %>
 				Bridge
 				<% } else { %>
@@ -121,8 +137,13 @@
 				<% } %>
 			</td>
             </tr>
+
+-->
+	</div>
 	<% i += 1; %>
 <% }); %>
+
+<!--
 	</tbody>
 	<tfoot>
 	<tr>
@@ -158,6 +179,5 @@
         </th>
 	</tr>
 	</tfoot>
-</table>
+</table> -->
 <% } %>
-</div>
