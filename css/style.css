@@ -12,6 +12,10 @@
     width: 30%;
 }
 
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+
 .splash {
     padding-top: 56px;
     padding-bottom: 72px;
