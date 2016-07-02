@@ -177,6 +177,13 @@ define([
         },
         render: function() {
             var data = {relay: this.model};
+            var dataLength = function (data) {
+                var length = 0;
+                for(var i = 0; i < data.length; ++i) {
+                    length += data[i].length;
+                }
+                return length;
+            };
             //console.log(data);
             var compiledTemplate;
             if (!this.model)
@@ -196,10 +203,12 @@ define([
                             'bw_months', 'bw_year', 'bw_years'];
                     _.each(graphs, function(g) {
                         var data = [graph.get(g).write, graph.get(g).read];
-                        var labels = ["written bytes per second", "read bytes per second"];
-                        var legendPos = [[140, 0], [310, 0]];
-                        var colors = ["#edc240", "#afd8f8"];
-                        plot(g, data, labels, legendPos, colors, "s", ".4s");
+                        if (dataLength(data) != 0 ) {
+                            var labels = ["written bytes per second", "read bytes per second"];
+                            var legendPos = [[140, 0], [310, 0]];
+                            var colors = ["#edc240", "#afd8f8"];
+                            plot(g, data, labels, legendPos, colors, "s", ".4s");
+                        }
                     });
                 }
             });
@@ -213,14 +222,16 @@ define([
                         _.each(graphs, function(g) {
                             var data = [graph.get(g).cw, graph.get(g).middle,
                                         graph.get(g).guard, graph.get(g).exit];
-                            var labels = ["consensus weight fraction",
-                                          "middle probability",
-                                          "guard probability",
-                                          "exit probability"];
-                            var legendPos = [[28, 0], [309, 0], [194, 0], [429, 0]];
-                            var colors = ["#afd8f8", "#edc240",
-                                          "#cb4b4b", "#4da74d"];
-                            plot(g, data, labels, legendPos, colors, ".4%", ".6%");
+                            if (dataLength(data) != 0 ) {
+				var labels = ["consensus weight fraction",
+					      "middle probability",
+					      "guard probability",
+					      "exit probability"];
+				var legendPos = [[28, 0], [309, 0], [194, 0], [429, 0]];
+				var colors = ["#afd8f8", "#edc240",
+					      "#cb4b4b", "#4da74d"];
+				plot(g, data, labels, legendPos, colors, ".4%", ".6%");
+                            }
                         });
                     }
                 });
@@ -231,11 +242,13 @@ define([
                         graphs = ['clients_week', 'clients_month',
                                 'clients_months', 'clients_year', 'clients_years'];
                         _.each(graphs, function(g) {
-                            var data = [graph.get(g).average];
-                            var labels = ["average number of connected clients"];
-                            var legendPos = [[3, 0]];
-                            var colors = ["#edc240"];
-                            plot(g, data, labels, legendPos, colors, "g", ".2g");
+                            if (dataLength(data) != 0 ) {
+				var data = [graph.get(g).average];
+				var labels = ["average number of connected clients"];
+				var legendPos = [[3, 0]];
+				var colors = ["#edc240"];
+				plot(g, data, labels, legendPos, colors, "g", ".2g");
+                            }
                         });
                     }
                 });
