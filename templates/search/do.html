@@ -63,12 +63,26 @@
   <% } %>
       <div class="panel-heading">
 	<h3 class="panel-title">
-    <a href="#details/<%= relay.get('fingerprint') %>">
-            <%= _.escape(relay.get('nickname')) %>
+      <% var points = [ ["circle-o","Not entry node"], ["circle","Middle node"], ["circle-o", "Not exit node"] ]; %>
+      <% _.each(relay.get('flags'), function(flag) { %>
+      <% if (flag[0] == "Guard") { %>
+      <% points[0][0] = "circle"; %>
+      <% points[0][1] = "Guard node"; %>
+      <% }; %>
       <% if (relay.get('is_bridge')) { %>
-      <i class="fa fa-truck" title="Bridge" aria-hidden="true"></i>
-      <span class="sr-only">Bridge</span>
-      <% } %>
+      <% points[0][0] = "dot-circle-o"; %>
+      <% points[0][1] = "Bridge node"; %>
+      <% }; %>
+      <% if (flag[0] == "Exit") { %>
+      <% points[2][0] = "circle"; %>
+      <% points[2][1] = "Exit node"; %>
+      <% }; %>
+      <% }); %>
+      <% _.each(points, function(point) { %>
+      <i class="fa fa-<%=point[0]%>" title="<%=point[1]%>" aria-hidden="true"></i>
+      <% }); %>
+    <a href="#details/<%= relay.get('fingerprint') %>">
+      <%= _.escape(relay.get('nickname')) %>
     </a>
        </h3>
   </div>
